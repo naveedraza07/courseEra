@@ -22,12 +22,12 @@
       "cities": [
         {
           "name": "Tokyo, Japan",
-          "imageUrl": "./images/tokyo_japan.jpg",
+          "imageUrl": "./images/tokyo_jap.jpg",
           "description": "A bustling metropolis blending tradition and modernity, famous for its cherry blossoms and rich culture."
         },
         {
           "name": "Kyoto, Japan",
-          "imageUrl": "./images/kyoto_japan.jpg",
+          "imageUrl": "./images/kyoto_jap.jpg",
           "description": "Known for its historic temples, gardens, and traditional tea houses."
         }
       ]
@@ -38,12 +38,12 @@
       "cities": [
         {
           "name": "Rio de Janeiro, Brazil",
-          "imageUrl": "./images/del_rio.jpg",
+          "imageUrl": "./images/del_rio_braz.jpg",
           "description": "A lively city known for its stunning beaches, vibrant carnival celebrations, and iconic landmarks."
         }
         ,        {
           "name": "São Paulo, Brazil",
-          "imageUrl": "sao_paulo_brazi.jpg",
+          "imageUrl": "./images/sao_paulo_braz.jpg",
           "description": "The financial hub with diverse culture, arts, and a vibrant nightlife."
         }
       ]

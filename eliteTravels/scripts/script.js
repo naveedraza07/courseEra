@@ -21,7 +21,7 @@ function fetchAndSearch(keyword) {
             
             // Search the main object NAME itself (like "countries", "temples", "beaches")
             if ("countries".includes(keyword.toLowerCase())) {
-                travelData.countries.forEach(country => addUniqueResult(country));
+                travelData.countries.forEach(country => addCountries(country));
             }
             
             if ("temples".includes(keyword.toLowerCase())) {
@@ -72,6 +72,7 @@ function fetchAndSearch(keyword) {
 
     // Function to add a result if it's not a duplicate
     function addUniqueResult(item) {
+
         const uniqueKey = `${item.id}-${item.name}`;
         console.log(uniqueKey);
         console.log(JSON.stringify(seenEntries));
@@ -79,9 +80,46 @@ function fetchAndSearch(keyword) {
          if (!seenEntries.has(uniqueKey)) {
             seenEntries.add(uniqueKey);
             results.push(item);
+            }
+        }
+        else {
+            seenEntries.add(uniqueKey); 
+            results.push(item);
         }
     }
-    else {seenEntries.add(uniqueKey); results.push(item);}
+
+    function addCountries(item) {
+        const cities=item.cities;
+        // cities.id=item.id;
+        
+        cities.forEach(city => {
+            let nItem=[];
+            const uniqueKey = `${item.id}-${city.name}`;
+            console.log('country:' + uniqueKey);
+            nItem.imageUrl = city.imageUrl;
+            nItem.id=item.id;
+            nItem.name= city.name;
+            nItem.description=city.description;
+        
+            console.log('item');
+            console.log(nItem.imageUrl);
+            if (seenEntries != undefined){
+                console.log('if main');
+                if (!seenEntries.has(uniqueKey)) {
+                    console.log('if child');
+                seenEntries.add(uniqueKey);
+                console.log(nItem)
+                results.push(nItem);
+                }
+            }
+            else {
+                console.log('else');
+                seenEntries.add(uniqueKey); 
+                results.push(nItem);
+            }
+
+        });
+
     }
 }
 
@@ -100,17 +138,39 @@ function displayResults(results) {
     }
 
     results.forEach(item => {
+        // console.log('display c');
+        // console.log(b);
+      
+        // const a=item.cities;
+        // // console.log(typeof a);
+        // // const b=castObjectToArray(a);
+        // console.log(item.cities[0]);
+        let t=item;//JSON.stringify(a);
+        if (item.imageUrl != undefined) {
         const div = document.createElement('div');
         div.innerHTML = `
             <hr>
             <h3>${item.name}</h3>
-            <p>${item.description || ''}</p>
+            <p>${item.description || ''} ${t.imageUrl}</p>
             <img src="${item.imageUrl}" alt="${item.name}" width="200">
-
-        `;
+            `;
+        
+        console.log(div);
         resultContainer.appendChild(div);
-       
+        }
     });
+
+    function castObjectToArray(obj) {
+        if (typeof obj !== 'object' || obj === null) {
+          return [obj]; // If it's not an object, or null, put it in an array and return.
+        }
+      
+        if (Array.isArray(obj)) {
+          return obj; // If it's already an array, return it.
+        }
+      
+        return Object.values(obj); // If it's a regular object, return its values as an array.
+      }
     
 }
 
