@@ -40,10 +40,10 @@
           "name": "Rio de Janeiro, Brazil",
           "imageUrl": "./images/del_rio.jpg",
           "description": "A lively city known for its stunning beaches, vibrant carnival celebrations, and iconic landmarks."
-        },
-        {
+        }
+        ,        {
           "name": "São Paulo, Brazil",
-          "imageUrl": "enter_your_image_for_sao-paulo.jpg",
+          "imageUrl": "sao_paulo_brazi.jpg",
           "description": "The financial hub with diverse culture, arts, and a vibrant nightlife."
         }
       ]

@@ -1,6 +1,6 @@
 let seenEntries = new Set();
 let results = [];
-// Function to fetch and search data from JSON file
+
 function fetchAndSearch(keyword) {
     fetch('scripts/travel_recommendation_api.json')
         .then(response => {
@@ -8,23 +8,18 @@ function fetchAndSearch(keyword) {
                 throw new Error(`Failed to load file. Status: ${response.status}`);
             }
             console.log('File loaded successfully');
-            // console.log(response.json());
             return response.json();
         })
         .then(travelData => {
-           
 
-            // ✅ To prevent duplicates, create a Set to track id-name pairs
-            
-
-            // Function to check if keyword exists in any object or value
+            // check if keyword exists in any object or value for duplication
             function searchInObject(obj) {
                 return Object.values(obj).some(value =>
                     typeof value === 'string' && value.toLowerCase().includes(keyword.toLowerCase())
                 );
             }
             
-            // ✅ Step 1: Search the object NAME itself (like "countries", "temples", "beaches")
+            // Search the main object NAME itself (like "countries", "temples", "beaches")
             if ("countries".includes(keyword.toLowerCase())) {
                 travelData.countries.forEach(country => addUniqueResult(country));
             }
@@ -32,15 +27,15 @@ function fetchAndSearch(keyword) {
             if ("temples".includes(keyword.toLowerCase())) {
                 travelData.temples.forEach(temple => addUniqueResult(temple));
             }
+
             if ("beaches".includes(keyword.toLowerCase())) {
                 travelData.beaches.forEach(beach => {
-                    addUniqueResult(beach);
-                
-            });
+                    addUniqueResult(beach);                
+                });
             }
             
             
-            // ✅ Step 2: Search in countries and their cities
+            // Search in countries and their cities
             travelData.countries.forEach(country => {
                 if (searchInObject(country)) {
                     addUniqueResult(country);
@@ -53,21 +48,21 @@ function fetchAndSearch(keyword) {
                 });
             });
 
-            // ✅ Step 3: Search in temples
+            // Search in temples
             travelData.temples.forEach(temple => {
                 if (searchInObject(temple)) {
                     addUniqueResult(temple);
                 }
             });
 
-            // ✅ Step 4: Search in beaches
+            // Search in beaches
             travelData.beaches.forEach(beach => {
                 if (searchInObject(beach)) {
                     addUniqueResult(beach);
                 }
             });
 
-           // // ✅ Step 5: Display the results
+           // // Display the results
             displayResults(results);
         })
         .catch(error => {
@@ -75,11 +70,11 @@ function fetchAndSearch(keyword) {
             document.getElementById('results').innerHTML = `<p>Error loading file. Please try again.</p>`;
         });
 
-    // ✅ Function to add a result if it's not a duplicate
+    // Function to add a result if it's not a duplicate
     function addUniqueResult(item) {
         const uniqueKey = `${item.id}-${item.name}`;
         console.log(uniqueKey);
-        // console.log(JSON.stringify(seenEntries));
+        console.log(JSON.stringify(seenEntries));
         if (seenEntries != undefined){
          if (!seenEntries.has(uniqueKey)) {
             seenEntries.add(uniqueKey);
@@ -92,11 +87,15 @@ function fetchAndSearch(keyword) {
 
 // Function to display search results
 function displayResults(results) {
-    const resultContainer = document.getElementById('results');
-    resultContainer.innerHTML = '';
+    const resultContainer = document.getElementById('results');    
 
     if (results.length === 0) {
-        resultContainer.innerHTML = '<p>No results found.</p>';
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <hr>
+            <p>No results found.</p>
+        `;
+        resultContainer.appendChild(div);
         return;
     }
 
@@ -110,17 +109,22 @@ function displayResults(results) {
 
         `;
         resultContainer.appendChild(div);
+       
     });
+    
 }
 
 // Event listener for search button
 document.getElementById('searchButton').addEventListener('click', function() {
+    
     const keyword = document.getElementById('searchInput').value;
-    resetPage();
+    document.getElementById('results').innerHTML='';
     if (keyword.trim() === '') {
         alert('Please enter a search keyword');
         return;
     }
+    seenEntries = new Set();
+    results = [];
     fetchAndSearch(keyword);
 });
 
