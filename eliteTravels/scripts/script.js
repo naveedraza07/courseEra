@@ -100,6 +100,7 @@ function fetchAndSearch(keyword) {
             nItem.id=item.id;
             nItem.name= city.name;
             nItem.description=city.description;
+            
         
             console.log('item');
             console.log(nItem.imageUrl);
