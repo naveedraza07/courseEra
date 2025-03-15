@@ -1,7 +1,7 @@
 let seenEntries = new Set();
 let results = [];
 
-function fetchAndSearch(keyword) {
+function fetchAndSearch(oKeyword) {
     fetch('scripts/travel_recommendation_api.json')
         .then(response => {
             if (!response.ok) {
@@ -12,23 +12,25 @@ function fetchAndSearch(keyword) {
         })
         .then(travelData => {
 
+           let keyword = normalizeWord(oKeyword);
             // check if keyword exists in any object or value for duplication
             function searchInObject(obj) {
                 return Object.values(obj).some(value =>
-                    typeof value === 'string' && value.toLowerCase().includes(keyword.toLowerCase())
+                    typeof value === 'string' && value.toLowerCase().includes(keyword)
                 );
             }
             
+            console.log(keyword);
             // Search the main object NAME itself (like "countries", "temples", "beaches")
-            if ("countries".includes(keyword.toLowerCase())) {
+            if ("countries".includes(keyword)) {
                 travelData.countries.forEach(country => addCountries(country));
             }
             
-            if ("temples".includes(keyword.toLowerCase())) {
+            if ("temples".includes(keyword)) {
                 travelData.temples.forEach(temple => addUniqueResult(temple));
             }
 
-            if ("beaches".includes(keyword.toLowerCase())) {
+            if ("beaches".includes(keyword)) {
                 travelData.beaches.forEach(beach => {
                     addUniqueResult(beach);                
                 });
@@ -37,6 +39,8 @@ function fetchAndSearch(keyword) {
             
             // Search in countries and their cities
             travelData.countries.forEach(country => {
+                console.log(JSON.stringify(country));
+                // console.log('country -:'+ country);
                 if (searchInObject(country)) {
                     addUniqueResult(country);
                 }
@@ -70,6 +74,21 @@ function fetchAndSearch(keyword) {
             document.getElementById('results').innerHTML = `<p>Error loading file. Please try again.</p>`;
         });
 
+
+    function normalizeWord(input) {
+        const wordMap = {
+            "country": "countries",
+            "countries": "countries",
+            "beach": "beaches",
+            "beaches": "beaches",
+            "temple": "temples",
+            "temples": "temples"
+        };
+        
+        const lowerInput = input.toLowerCase();
+        return wordMap[lowerInput] || lowerInput;
+    }
+
     // Function to add a result if it's not a duplicate
     function addUniqueResult(item) {
 
@@ -95,7 +114,6 @@ function fetchAndSearch(keyword) {
         cities.forEach(city => {
             let nItem=[];
             const uniqueKey = `${item.id}-${city.name}`;
-            console.log('country:' + uniqueKey);
             nItem.imageUrl = city.imageUrl;
             nItem.id=item.id;
             nItem.name= city.name;
@@ -105,16 +123,12 @@ function fetchAndSearch(keyword) {
             console.log('item');
             console.log(nItem.imageUrl);
             if (seenEntries != undefined){
-                console.log('if main');
                 if (!seenEntries.has(uniqueKey)) {
-                    console.log('if child');
                 seenEntries.add(uniqueKey);
-                console.log(nItem)
                 results.push(nItem);
                 }
             }
             else {
-                console.log('else');
                 seenEntries.add(uniqueKey); 
                 results.push(nItem);
             }
@@ -144,7 +158,6 @@ function displayResults(results) {
       
         // const a=item.cities;
         // // console.log(typeof a);
-        // // const b=castObjectToArray(a);
         // console.log(item.cities[0]);
         let t=item;//JSON.stringify(a);
         if (item.imageUrl != undefined) {
@@ -152,7 +165,7 @@ function displayResults(results) {
         div.innerHTML = `
             <hr>
             <h3>${item.name}</h3>
-            <p>${item.description || ''} ${t.imageUrl}</p>
+            <p>${item.description || ''}</p>
             <img src="${item.imageUrl}" alt="${item.name}" width="200">
             `;
         
@@ -160,18 +173,6 @@ function displayResults(results) {
         resultContainer.appendChild(div);
         }
     });
-
-    function castObjectToArray(obj) {
-        if (typeof obj !== 'object' || obj === null) {
-          return [obj]; // If it's not an object, or null, put it in an array and return.
-        }
-      
-        if (Array.isArray(obj)) {
-          return obj; // If it's already an array, return it.
-        }
-      
-        return Object.values(obj); // If it's a regular object, return its values as an array.
-      }
     
 }
 
