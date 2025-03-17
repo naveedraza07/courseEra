@@ -153,13 +153,6 @@ function displayResults(results) {
     }
 
     results.forEach(item => {
-        // console.log('display c');
-        // console.log(b);
-      
-        // const a=item.cities;
-        // // console.log(typeof a);
-        // console.log(item.cities[0]);
-        let t=item;//JSON.stringify(a);
         if (item.imageUrl != undefined) {
         const div = document.createElement('div');
         div.innerHTML = `

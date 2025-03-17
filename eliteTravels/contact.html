@@ -24,8 +24,14 @@
             <input type="email" id="email" name="email" required>
             <label for="message">Message:</label>
             <textarea id="message" name="message" required></textarea>
-            <button type="submit">Submit</button>
+            <button id="sendEmailBtn">Submit</button>
         </form>
     </div>
+
+    <script>
+    document.getElementById('sendEmailBtn').addEventListener('click', function() {
+        alert('Thank you! You message has been received.');
+    });
+</script>
 </body>
 </html>
