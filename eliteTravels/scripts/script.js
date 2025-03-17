@@ -109,7 +109,6 @@ function fetchAndSearch(oKeyword) {
 
     function addCountries(item) {
         const cities=item.cities;
-        // cities.id=item.id;
         
         cities.forEach(city => {
             let nItem=[];
